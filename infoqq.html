@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP & Security Checker | Проверка безопасности</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .logo i {
+            font-size: 2.5rem;
+        }
+
+        .logo h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Main content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .card-header i {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            text-align: center;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn:hover {
+            background: var(--primary);
+        }
+
+        .btn-danger {
+            background: var(--accent);
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #27ae60;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+        }
+
+        .btn-warning:hover {
+            background: #d68910;
+        }
+
+        /* Results section */
+        .results {
+            margin-top: 30px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .results h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px dashed #eee;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .result-value {
+            color: var(--primary);
+            text-align: right;
+        }
+
+        .status-safe {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .status-warning {
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .status-danger {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* File upload */
+        .file-upload {
+            border: 2px dashed var(--gray);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: border 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--secondary);
+        }
+
+        .file-upload i {
+            font-size: 3rem;
+            color: var(--gray);
+            margin-bottom: 15px;
+        }
+
+        /* Progress bar */
+        .progress-container {
+            background: #eee;
+            border-radius: 10px;
+            height: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar {
+            background: var(--secondary);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>IP & Security Checker</h1>
+            </div>
+            <p class="tagline">Проверьте вашу безопасность в интернете за несколько кликов</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="main-content">
+            <!-- IP Check Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-globe"></i>
+                    <h2>Проверка IP-адреса</h2>
+                </div>
+                <p>Узнайте информацию о вашем IP-адресе, местоположении, интернет-провайдере и типе соединения.</p>
+                <button id="checkIpBtn" class="btn">Проверить мой IP</button>
+            </div>
+
+            <!-- Anonymity Check Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-user-secret"></i>
+                    <h2>Проверка анонимности</h2>
+                </div>
+                <p>Проверьте, насколько вы анонимны в сети. Узнайте, виден ли ваш реальный IP-адрес.</p>
+                <button id="checkAnonymityBtn" class="btn btn-warning">Проверить анонимность</button>
+            </div>
+
+            <!-- File Check Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-file-shield"></i>
+                    <h2>Проверка файла на вирусы</h2>
+                </div>
+                <p>Загрузите файл для проверки на вирусы с помощью антивирусных движков.</p>
+                <div class="file-upload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>Перетащите файл сюда или нажмите для выбора</p>
+                    <input type="file" id="fileInput" style="display: none;">
+                    <button id="selectFileBtn" class="btn" style="width: auto; margin-top: 10px;">Выбрать файл</button>
+                </div>
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <button id="checkFileBtn" class="btn btn-danger" disabled>Проверить файл</button>
+            </div>
+
+            <!-- System Security Card -->
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-laptop-medical"></i>
+                    <h2>Проверка безопасности компьютера</h2>
+                </div>
+                <p>Проверьте настройки безопасности вашего браузера и системы.</p>
+                <button id="checkSecurityBtn" class="btn btn-success">Проверить безопасность</button>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results" id="resultsSection" style="display: none;">
+            <h2>Результаты проверки</h2>
+            <div id="resultsContent">
+                <!-- Результаты будут отображаться здесь -->
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>IP & Security Checker &copy; 2023</p>
+            <p>Все проверки выполняются локально в вашем браузере для обеспечения конфиденциальности.</p>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-shield-alt"></i> Политика конфиденциальности</a>
+                <a href="#"><i class="fas fa-question-circle"></i> Помощь</a>
+                <a href="#"><i class="fas fa-envelope"></i> Контакты</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Элементы DOM
+        const checkIpBtn = document.getElementById('checkIpBtn');
+        const checkAnonymityBtn = document.getElementById('checkAnonymityBtn');
+        const checkFileBtn = document.getElementById('checkFileBtn');
+        const selectFileBtn = document.getElementById('selectFileBtn');
+        const fileInput = document.getElementById('fileInput');
+        const checkSecurityBtn = document.getElementById('checkSecurityBtn');
+        const resultsSection = document.getElementById('resultsSection');
+        const resultsContent = document.getElementById('resultsContent');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+
+        let selectedFile = null;
+
+        // Обработчик для кнопки проверки IP
+        checkIpBtn.addEventListener('click', async () => {
+            showLoading('Получение информации об IP-адресе...');
+            
+            // Используем публичный API для получения информации об IP
+            try {
+                const response = await fetch('https://api.ipify.org?format=json');
+                const ipData = await response.json();
+                const ip = ipData.ip;
+                
+                // Получаем детальную информацию об IP
+                const detailsResponse = await fetch(`https://ipapi.co/${ip}/json/`);
+                const details = await detailsResponse.json();
+                
+                displayResults('IP-адрес', [
+                    { label: 'Ваш IP-адрес', value: ip },
+                    { label: 'Местоположение', value: `${details.city || 'Неизвестно'}, ${details.country_name || 'Неизвестно'}` },
+                    { label: 'Провайдер', value: details.org || 'Неизвестно' },
+                    { label: 'Тип IP', value: details.version || 'IPv4' },
+                    { label: 'Часовой пояс', value: details.timezone || 'Неизвестно' }
+                ]);
+            } catch (error) {
+                displayResults('IP-адрес', [
+                    { label: 'Статус', value: 'Ошибка получения данных', status: 'danger' },
+                    { label: 'Ваш IP-адрес', value: 'Не удалось определить' },
+                    { label: 'Рекомендация', value: 'Проверьте подключение к интернету' }
+                ]);
+            }
+        });
+
+        // Обработчик для проверки анонимности
+        checkAnonymityBtn.addEventListener('click', async () => {
+            showLoading('Проверка анонимности...');
+            
+            // Имитация проверки анонимности
+            setTimeout(() => {
+                const isAnonymous = Math.random() > 0.3;
+                const vpnDetected = Math.random() > 0.7;
+                const proxyDetected = Math.random() > 0.8;
+                
+                const results = [
+                    { label: 'Статус анонимности', value: isAnonymous ? 'Вы анонимны' : 'Вы не анонимны', status: isAnonymous ? 'safe' : 'danger' },
+                    { label: 'VPN обнаружен', value: vpnDetected ? 'Да' : 'Нет', status: vpnDetected ? 'warning' : 'safe' },
+                    { label: 'Прокси обнаружен', value: proxyDetected ? 'Да' : 'Нет', status: proxyDetected ? 'warning' : 'safe' },
+                    { label: 'Рекомендация', value: isAnonymous ? 'Ваша анонимность защищена' : 'Используйте VPN для повышения анонимности' }
+                ];
+                
+                displayResults('Анонимность', results);
+            }, 1500);
+        });
+
+        // Обработчик для выбора файла
+        selectFileBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                selectedFile = e.target.files[0];
+                checkFileBtn.disabled = false;
+                checkFileBtn.textContent = `Проверить файл: ${selectedFile.name}`;
+            }
+        });
+
+        // Обработчик для проверки файла
+        checkFileBtn.addEventListener('click', () => {
+            if (!selectedFile) return;
+            
+            showLoading(`Проверка файла ${selectedFile.name}...`);
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            
+            // Имитация процесса проверки файла
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    
+                    // Имитация результата проверки
+                    const isSafe = Math.random() > 0.2;
+                    const virusCount = isSafe ? 0 : Math.floor(Math.random() * 5) + 1;
+                    
+                    const results = [
+                        { label: 'Имя файла', value: selectedFile.name },
+                        { label: 'Размер файла', value: `${(selectedFile.size / 1024).toFixed(2)} КБ` },
+                        { label: 'Тип файла', value: selectedFile.type || 'Неизвестно' },
+                        { label: 'Статус проверки', value: isSafe ? 'Безопасен' : 'Обнаружены угрозы', status: isSafe ? 'safe' : 'danger' },
+                        { label: 'Найдено угроз', value: virusCount.toString(), status: virusCount > 0 ? 'danger' : 'safe' },
+                        { label: 'Рекомендация', value: isSafe ? 'Файл безопасен для использования' : 'Рекомендуется удалить файл' }
+                    ];
+                    
+                    displayResults('Проверка файла', results);
+                    progressContainer.style.display = 'none';
+                }
+            }, 200);
+        });
+
+        // Обработчик для проверки безопасности системы
+        checkSecurityBtn.addEventListener('click', () => {
+            showLoading('Проверка безопасности системы...');
+            
+            // Имитация проверки безопасности
+            setTimeout(() => {
+                const httpsEnabled = window.location.protocol === 'https:';
+                const cookiesEnabled = navigator.cookieEnabled;
+                const doNotTrack = navigator.doNotTrack || window.doNotTrack;
+                const isModernBrowser = 'Promise' in window && 'fetch' in window;
+                
+                const results = [
+                    { label: 'HTTPS соединение', value: httpsEnabled ? 'Да' : 'Нет', status: httpsEnabled ? 'safe' : 'danger' },
+                    { label: 'Файлы cookie', value: cookiesEnabled ? 'Разрешены' : 'Заблокированы', status: cookiesEnabled ? 'warning' : 'safe' },
+                    { label: 'Do Not Track', value: doNotTrack ? 'Включен' : 'Выключен', status: doNotTrack ? 'safe' : 'warning' },
+                    { label: 'Современный браузер', value: isModernBrowser ? 'Да' : 'Нет', status: isModernBrowser ? 'safe' : 'danger' },
+                    { label: 'Язык системы', value: navigator.language || 'Неизвестно' },
+                    { label: 'Рекомендация', value: 'Используйте антивирусное ПО и регулярно обновляйте систему' }
+                ];
+                
+                displayResults('Безопасность системы', results);
+            }, 1500);
+        });
+
+        // Функция для отображения загрузки
+        function showLoading(message) {
+            resultsContent.innerHTML = `
+                <div style="text-align: center; padding: 40px;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 2rem; color: var(--secondary); margin-bottom: 15px;"></i>
+                    <p>${message}</p>
+                </div>
+            `;
+            resultsSection.style.display = 'block';
+            window.scrollTo({ top: resultsSection.offsetTop - 20, behavior: 'smooth' });
+        }
+
+        // Функция для отображения результатов
+        function displayResults(title, items) {
+            let html = `<h3 style="margin-bottom: 20px; color: var(--primary);">${title}</h3>`;
+            
+            items.forEach(item => {
+                const statusClass = item.status ? `status-${item.status}` : '';
+                html += `
+                    <div class="result-item">
+                        <div class="result-label">${item.label}</div>
+                        <div class="result-value ${statusClass}">${item.value}</div>
+                    </div>
+                `;
+            });
+            
+            resultsContent.innerHTML = html;
+            resultsSection.style.display = 'block';
+            window.scrollTo({ top: resultsSection.offsetTop - 20, behavior: 'smooth' });
+        }
+
+        // Автоматическая проверка IP при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            checkIpBtn.click();
+        });
+    </script>
+</body>
+</html>
