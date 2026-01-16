@@ -3,559 +3,205 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecurityCheck | Проверка безопасности</title>
+    <title>SecurityCheck - Проверка безопасности онлайн</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== GLOBAL STYLES ===== */
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --dark-bg: #0f172a;
-            --dark-card: #1e293b;
-            --dark-border: #334155;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent: #8b5cf6;
-            --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
-        }
-
-        html {
-            scroll-behavior: smooth;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            background-color: var(--dark-bg);
-            color: var(--text-primary);
+            background-color: #0f172a;
+            color: #e2e8f0;
             line-height: 1.6;
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
         }
 
-        /* ===== CONTAINER & LAYOUT ===== */
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px;
         }
 
-        /* ===== HEADER ===== */
-        .main-header {
-            padding: 40px 0 30px;
-            border-bottom: 1px solid var(--dark-border);
-            margin-bottom: 40px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header-content {
+        header {
             text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .logo-icon {
-            font-size: 2.5rem;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
-        }
-
-        .logo-text {
-            font-size: 2.8rem;
-            font-weight: 800;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-        }
-
-        .tagline {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 700px;
-            margin: 0 auto 25px;
-            line-height: 1.7;
-        }
-
-        /* ===== TABS ===== */
-        .tabs-container {
-            background: var(--dark-card);
-            border-radius: 16px;
-            border: 1px solid var(--dark-border);
+            padding: 40px 0 30px;
+            border-bottom: 1px solid #334155;
             margin-bottom: 40px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        .tabs-header {
-            display: flex;
-            overflow-x: auto;
-            scrollbar-width: none;
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--dark-border);
+        header h1 {
+            font-size: 2.8rem;
+            color: #38bdf8;
+            margin-bottom: 10px;
         }
 
-        .tabs-header::-webkit-scrollbar {
-            display: none;
+        header p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
-        .tab-btn {
-            padding: 20px 30px;
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.3s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
         }
 
-        .tab-btn i {
-            font-size: 1.2rem;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn:hover {
-            color: var(--text-primary);
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .tab-btn.active {
-            color: var(--primary);
-            background: rgba(99, 102, 241, 0.15);
-        }
-
-        .tab-btn.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--gradient);
-            border-radius: 3px 3px 0 0;
-        }
-
-        .tab-btn.active i {
-            transform: scale(1.1);
-        }
-
-        .tab-content {
-            display: none;
-            padding: 40px;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* ===== FEATURE CARDS ===== */
         .feature-card {
-            background: var(--dark-card);
-            border-radius: 16px;
-            padding: 40px;
-            border: 1px solid var(--dark-border);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+            background-color: #1e293b;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #334155;
         }
 
         .feature-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            border-color: var(--primary);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
         }
 
         .feature-icon {
-            font-size: 3rem;
-            margin-bottom: 25px;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 16px;
-            background: rgba(99, 102, 241, 0.1);
-            color: var(--primary);
+            font-size: 2.5rem;
+            color: #38bdf8;
+            margin-bottom: 20px;
         }
 
         .feature-card h3 {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             margin-bottom: 15px;
-            color: var(--text-primary);
-            font-weight: 700;
+            color: #f1f5f9;
         }
 
         .feature-card p {
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-            flex-grow: 1;
-            line-height: 1.7;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            min-height: 60px;
         }
 
-        /* ===== BUTTONS ===== */
         .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: var(--gradient);
+            display: inline-block;
+            background-color: #3b82f6;
             color: white;
-            padding: 16px 32px;
-            border-radius: 12px;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-decoration: none;
             font-weight: 600;
-            font-size: 1rem;
             border: none;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: background-color 0.3s;
             width: 100%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
+            text-align: center;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.3);
+            background-color: #2563eb;
         }
 
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn i {
-            font-size: 1.2rem;
-        }
-
-        /* ===== FILE UPLOAD ===== */
-        .file-upload-area {
-            background: var(--dark-bg);
-            border: 2px dashed var(--dark-border);
+        .result-area {
+            background-color: #1e293b;
             border-radius: 12px;
-            padding: 60px 30px;
-            text-align: center;
-            margin-bottom: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            padding: 25px;
+            margin-top: 25px;
+            display: none;
+            border: 1px solid #334155;
         }
 
-        .file-upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(99, 102, 241, 0.05);
-            transform: translateY(-2px);
+        .result-area h4 {
+            color: #38bdf8;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
         }
 
-        .file-upload-area.dragover {
-            border-color: var(--secondary);
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .file-upload-icon {
-            font-size: 4rem;
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .file-upload-area:hover .file-upload-icon {
-            color: var(--primary);
-            transform: scale(1.1);
-        }
-
-        .file-upload-text {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-            margin-bottom: 10px;
-        }
-
-        .file-upload-hint {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            opacity: 0.8;
-        }
-
-        .file-preview {
-            background: var(--dark-bg);
-            border-radius: 12px;
+        .result-content {
+            background-color: #0f172a;
             padding: 20px;
-            margin-top: 20px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-            border: 1px solid var(--dark-border);
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
         }
 
-        .file-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .file-icon {
-            font-size: 2.5rem;
-            color: var(--primary);
-        }
-
-        .file-details {
-            flex-grow: 1;
-        }
-
-        .file-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            word-break: break-all;
-        }
-
-        .file-size {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .file-remove {
-            background: none;
-            border: none;
-            color: var(--danger);
-            font-size: 1.2rem;
+        .file-upload {
+            background-color: #1e293b;
+            border: 2px dashed #475569;
+            border-radius: 8px;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 20px;
             cursor: pointer;
-            padding: 5px;
-            border-radius: 6px;
-            transition: all 0.3s ease;
         }
 
-        .file-remove:hover {
-            background: rgba(239, 68, 68, 0.1);
+        .file-upload:hover {
+            border-color: #3b82f6;
         }
 
-        /* ===== PROGRESS BAR ===== */
-        .progress-container {
-            margin: 25px 0;
-            display: none;
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .file-upload i {
+            font-size: 3rem;
+            color: #475569;
+            margin-bottom: 15px;
         }
 
         .progress-bar {
-            height: 10px;
-            background: var(--dark-border);
-            border-radius: 5px;
+            height: 8px;
+            background-color: #334155;
+            border-radius: 4px;
+            margin-top: 15px;
             overflow: hidden;
-            position: relative;
+            display: none;
         }
 
         .progress-fill {
             height: 100%;
-            background: var(--gradient);
-            border-radius: 5px;
+            background-color: #10b981;
             width: 0%;
-            transition: width 0.5s ease;
-            position: relative;
-            overflow: hidden;
+            transition: width 0.5s;
         }
 
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, 
-                transparent 25%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                transparent 75%);
-            animation: shimmer 2s infinite;
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        .safe {
+            background-color: #10b981;
         }
 
-        /* ===== RESULTS ===== */
-        .result-container {
-            background: var(--dark-bg);
-            border-radius: 16px;
-            padding: 30px;
-            margin-top: 30px;
-            border: 1px solid var(--dark-border);
-            display: none;
-            animation: fadeIn 0.5s ease;
+        .warning {
+            background-color: #f59e0b;
         }
 
-        .result-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--dark-border);
+        .danger {
+            background-color: #ef4444;
         }
 
-        .result-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-
-        .result-title i {
-            color: var(--primary);
-        }
-
-        .result-status {
-            padding: 6px 16px;
-            border-radius: 20px;
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
             font-size: 0.9rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        .status-safe {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--secondary);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-        }
-
-        .status-warning {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-            border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .status-danger {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--danger);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-        }
-
-        .result-content {
-            background: rgba(15, 23, 42, 0.5);
-            border-radius: 12px;
-            padding: 25px;
-            font-family: 'JetBrains Mono', 'Fira Code', monospace;
-            font-size: 0.95rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
-            max-height: 400px;
-            overflow-y: auto;
-            border: 1px solid var(--dark-border);
-        }
-
-        .result-content pre {
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        .result-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-        }
-
-        .result-item:last-child {
-            margin-bottom: 0;
-            border-bottom: none;
-        }
-
-        .result-label {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .result-label i {
-            width: 20px;
-            color: var(--primary);
-        }
-
-        .result-value {
-            color: var(--text-secondary);
-            margin-left: 28px;
-        }
-
-        /* ===== LOADER ===== */
         .loader {
             display: none;
-            text-align: center;
-            padding: 40px;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--dark-border);
-            border-top: 4px solid var(--primary);
+            border: 3px solid #334155;
+            border-top: 3px solid #38bdf8;
             border-radius: 50%;
+            width: 40px;
+            height: 40px;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        .loader-text {
-            color: var(--text-secondary);
-            font-size: 1rem;
+            margin: 0 auto 15px;
         }
 
         @keyframes spin {
@@ -563,606 +209,574 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* ===== STATS GRID ===== */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin: 40px 0;
+        .tab-container {
+            margin-bottom: 30px;
         }
 
-        .stat-card {
-            background: var(--dark-card);
-            border-radius: 16px;
-            padding: 30px;
-            border: 1px solid var(--dark-border);
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .stat-icon {
-            font-size: 2.5rem;
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #334155;
             margin-bottom: 20px;
-            color: var(--primary);
         }
 
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 10px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
+        .tab {
+            padding: 12px 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-weight: 600;
             font-size: 1rem;
+            border-bottom: 3px solid transparent;
         }
 
-        /* ===== FOOTER ===== */
-        .main-footer {
-            margin-top: 60px;
-            padding: 40px 0;
-            border-top: 1px solid var(--dark-border);
-            text-align: center;
+        .tab.active {
+            color: #38bdf8;
+            border-bottom: 3px solid #38bdf8;
         }
 
-        .footer-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+        .tab-content {
+            display: none;
         }
 
-        .footer-logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .tab-content.active {
+            display: block;
         }
 
-        .footer-text {
-            color: var(--text-secondary);
+        .info-note {
+            background-color: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
             font-size: 0.95rem;
-            max-width: 600px;
-            line-height: 1.7;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 20px;
-            margin-top: 10px;
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.3s ease;
-            font-size: 0.9rem;
-        }
-
-        .footer-link:hover {
-            color: var(--primary);
-        }
-
-        /* ===== RESPONSIVE DESIGN ===== */
-        @media (max-width: 992px) {
-            .container {
-                padding: 0 15px;
-            }
-            
-            .logo-text {
-                font-size: 2.2rem;
-            }
-            
-            .tab-content {
-                padding: 30px 20px;
-            }
-            
-            .feature-card {
-                padding: 30px;
-            }
         }
 
         @media (max-width: 768px) {
-            .logo {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .logo-text {
-                font-size: 2rem;
-            }
-            
-            .tabs-header {
-                flex-wrap: wrap;
-            }
-            
-            .tab-btn {
-                flex: 1;
-                min-width: 140px;
-                justify-content: center;
-                padding: 18px 20px;
-            }
-            
-            .stats-grid {
+            .features-grid {
                 grid-template-columns: 1fr;
             }
             
-            .footer-links {
-                flex-wrap: wrap;
-                justify-content: center;
+            header h1 {
+                font-size: 2.2rem;
             }
-        }
-
-        @media (max-width: 480px) {
-            .main-header {
-                padding: 30px 0 20px;
-            }
-            
-            .logo-text {
-                font-size: 1.8rem;
-            }
-            
-            .tagline {
-                font-size: 1rem;
-            }
-            
-            .tab-btn {
-                min-width: 120px;
-                padding: 15px;
-                font-size: 0.9rem;
-            }
-            
-            .feature-card {
-                padding: 25px 20px;
-            }
-            
-            .btn {
-                padding: 14px 24px;
-                font-size: 0.95rem;
-            }
-        }
-
-        /* ===== UTILITY CLASSES ===== */
-        .text-gradient {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .glow {
-            filter: drop-shadow(0 0 15px rgba(99, 102, 241, 0.3));
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.8s ease;
         }
     </style>
 </head>
 <body>
-    <!-- Main Container -->
     <div class="container">
-        <!-- Header -->
-        <header class="main-header">
-            <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-shield-alt logo-icon"></i>
-                    <h1 class="logo-text">SecurityCheck</h1>
-                </div>
-                <p class="tagline">
-                    Комплексная проверка безопасности в реальном времени. 
-                    Анализируйте IP-адрес, анонимность, файлы и безопасность системы 
-                    с помощью передовых технологий.
-                </p>
-                
-                <!-- Stats -->
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <i class="fas fa-bolt stat-icon"></i>
-                        <div class="stat-number">0.5с</div>
-                        <div class="stat-label">Среднее время проверки</div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-shield-check stat-icon"></i>
-                        <div class="stat-number">99.8%</div>
-                        <div class="stat-label">Точность обнаружения</div>
-                    </div>
-                    <div class="stat-card">
-                        <i class="fas fa-user-friends stat-icon"></i>
-                        <div class="stat-number">50K+</div>
-                        <div class="stat-label">Проверок ежедневно</div>
-                    </div>
-                </div>
-            </div>
+        <header>
+            <h1>SecurityCheck</h1>
+            <p>Многофункциональный инструмент для проверки безопасности в интернете. Проверьте свой IP-адрес, анонимность, загруженные файлы и безопасность системы.</p>
         </header>
 
-        <!-- Main Content -->
-        <main>
-            <!-- Tabs -->
-            <div class="tabs-container">
-                <!-- Tab Headers -->
-                <div class="tabs-header">
-                    <button class="tab-btn active" data-tab="ip-check">
+        <div class="tab-container">
+            <div class="tabs">
+                <button class="tab active" data-tab="ip-check">Проверка IP</button>
+                <button class="tab" data-tab="anonymity">Анонимность</button>
+                <button class="tab" data-tab="file-check">Проверка файлов</button>
+                <button class="tab" data-tab="security">Безопасность системы</button>
+            </div>
+
+            <!-- Вкладка проверки IP -->
+            <div id="ip-check" class="tab-content active">
+                <div class="feature-card">
+                    <div class="feature-icon">
                         <i class="fas fa-map-marker-alt"></i>
-                        Проверка IP
-                    </button>
-                    <button class="tab-btn" data-tab="anonymity">
+                    </div>
+                    <h3>Проверка вашего IP-адреса</h3>
+                    <p>Узнайте ваш текущий IP-адрес, местоположение, интернет-провайдера и другую информацию о вашем сетевом соединении.</p>
+                    <button class="btn" id="check-ip-btn">Проверить IP-адрес</button>
+                    
+                    <div class="result-area" id="ip-result">
+                        <h4>Результат проверки IP</h4>
+                        <div class="result-content" id="ip-result-content">
+                            <!-- Здесь будут отображаться результаты -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Вкладка проверки анонимности -->
+            <div id="anonymity" class="tab-content">
+                <div class="feature-card">
+                    <div class="feature-icon">
                         <i class="fas fa-user-secret"></i>
-                        Анонимность
-                    </button>
-                    <button class="tab-btn" data-tab="file-check">
-                        <i class="fas fa-shield-virus"></i>
-                        Проверка файлов
-                    </button>
-                    <button class="tab-btn" data-tab="security">
-                        <i class="fas fa-laptop-medical"></i>
-                        Безопасность
-                    </button>
-                </div>
-
-                <!-- Tab Contents -->
-                <!-- IP Check Tab -->
-                <div id="ip-check" class="tab-content active">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3>Детальный анализ IP-адреса</h3>
-                        <p>
-                            Получите полную информацию о вашем IP-адресе: местоположение, провайдер, 
-                            тип подключения и возможные угрозы. Проверьте, не используете ли вы 
-                            публичный прокси или VPN.
-                        </p>
-                        <button class="btn" id="check-ip-btn">
-                            <i class="fas fa-search"></i>
-                            Запустить проверку IP
-                        </button>
-                        
-                        <!-- Results will be inserted here -->
-                        <div id="ip-results-container"></div>
                     </div>
-                </div>
-
-                <!-- Anonymity Check Tab -->
-                <div id="anonymity" class="tab-content">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-user-secret"></i>
+                    <h3>Проверка вашей анонимности в сети</h3>
+                    <p>Проверьте, насколько вы анонимны в интернете. Узнайте, какие данные о вас видят сайты и рекламные сети.</p>
+                    <button class="btn" id="check-anonymity-btn">Проверить анонимность</button>
+                    
+                    <div class="result-area" id="anonymity-result">
+                        <h4>Результат проверки анонимности</h4>
+                        <div class="result-content" id="anonymity-result-content">
+                            <!-- Здесь будут отображаться результаты -->
                         </div>
-                        <h3>Проверка анонимности в сети</h3>
-                        <p>
-                            Узнайте, насколько вы защищены от отслеживания. Проверьте наличие 
-                            цифровых отпечатков, активных трекеров и оцените уровень вашей 
-                            приватности в интернете.
-                        </p>
-                        <button class="btn" id="check-anonymity-btn">
-                            <i class="fas fa-search"></i>
-                            Проверить анонимность
-                        </button>
-                        
-                        <!-- Results will be inserted here -->
-                        <div id="anonymity-results-container"></div>
-                    </div>
-                </div>
-
-                <!-- File Check Tab -->
-                <div id="file-check" class="tab-content">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-virus"></i>
-                        </div>
-                        <h3>Антивирусная проверка файлов</h3>
-                        <p>
-                            Загрузите файл для проверки на вирусы и вредоносное ПО. 
-                            Используем 68 антивирусных движков для максимальной точности. 
-                            Максимальный размер файла: 100 МБ.
-                        </p>
-                        
-                        <!-- File Upload Area -->
-                        <div class="file-upload-area" id="file-drop-area">
-                            <i class="fas fa-cloud-upload-alt file-upload-icon"></i>
-                            <div class="file-upload-text">
-                                Перетащите файл сюда или нажмите для выбора
-                            </div>
-                            <div class="file-upload-hint">
-                                Поддерживаются все типы файлов до 100 МБ
-                            </div>
-                            <input type="file" id="file-input" hidden>
-                        </div>
-                        
-                        <!-- File Preview -->
-                        <div class="file-preview" id="file-preview"></div>
-                        
-                        <!-- Progress Bar -->
-                        <div class="progress-container" id="progress-container">
-                            <div class="progress-header">
-                                <span>Сканирование...</span>
-                                <span id="progress-percent">0%</span>
-                            </div>
-                            <div class="progress-bar">
-                                <div class="progress-fill" id="progress-fill"></div>
-                            </div>
-                        </div>
-                        
-                        <button class="btn" id="scan-file-btn" disabled>
-                            <i class="fas fa-virus"></i>
-                            Начать сканирование файла
-                        </button>
-                        
-                        <!-- Results will be inserted here -->
-                        <div id="file-results-container"></div>
-                    </div>
-                </div>
-
-                <!-- Security Check Tab -->
-                <div id="security" class="tab-content">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-laptop-medical"></i>
-                        </div>
-                        <h3>Комплексная проверка безопасности</h3>
-                        <p>
-                            Проведите глубокий анализ безопасности вашей системы. 
-                            Проверьте настройки браузера, обновления системы, 
-                            наличие уязвимостей и рекомендации по защите.
-                        </p>
-                        <button class="btn" id="check-security-btn">
-                            <i class="fas fa-shield-alt"></i>
-                            Запустить проверку безопасности
-                        </button>
-                        
-                        <!-- Results will be inserted here -->
-                        <div id="security-results-container"></div>
                     </div>
                 </div>
             </div>
-        </main>
 
-        <!-- Footer -->
-        <footer class="main-footer">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-shield-alt"></i>
-                    SecurityCheck
+            <!-- Вкладка проверки файлов -->
+            <div id="file-check" class="tab-content">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Проверка файла на вирусы</h3>
+                    <p>Загрузите файл для проверки на наличие вирусов и вредоносного кода. Максимальный размер файла: 50 МБ.</p>
+                    
+                    <div class="file-upload" id="file-drop-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Перетащите файл сюда или нажмите для выбора</p>
+                        <input type="file" id="file-input" style="display: none;">
+                    </div>
+                    
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    
+                    <button class="btn" id="scan-file-btn" disabled>Сканировать файл</button>
+                    
+                    <div class="result-area" id="file-result">
+                        <h4>Результат проверки файла</h4>
+                        <div class="result-content" id="file-result-content">
+                            <!-- Здесь будут отображаться результаты -->
+                        </div>
+                    </div>
                 </div>
-                <p class="footer-text">
-                    SecurityCheck — это инструмент для проверки безопасности, созданный для защиты 
-                    вашей приватности в интернете. Все проверки выполняются анонимно и безопасно.
-                </p>
-                <div class="footer-links">
-                    <a href="#" class="footer-link">Политика конфиденциальности</a>
-                    <a href="#" class="footer-link">Условия использования</a>
-                    <a href="#" class="footer-link">Контакты</a>
-                </div>
-                <p class="footer-text">
-                    &copy; 2024 SecurityCheck. Все права защищены.<br>
-                    Информация предоставляется исключительно в ознакомительных целях.
-                </p>
             </div>
+
+            <!-- Вкладка проверки безопасности -->
+            <div id="security" class="tab-content">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <h3>Проверка безопасности вашего компьютера</h3>
+                    <p>Проверьте настройки безопасности вашего браузера и системы на наличие уязвимостей.</p>
+                    <button class="btn" id="check-security-btn">Проверить безопасность</button>
+                    
+                    <div class="result-area" id="security-result">
+                        <h4>Результат проверки безопасности</h4>
+                        <div class="result-content" id="security-result-content">
+                            <!-- Здесь будут отображаться результаты -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-note">
+            <p><strong>Примечание:</strong> Все проверки выполняются на стороне клиента. Мы не храним и не передаем третьим лицам ваши данные. Проверка файлов использует эмуляцию антивирусного сканирования, для реальной проверки на вирусы рекомендуется использовать специализированные антивирусные программы.</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Быстрые проверки</h3>
+                <p>Все проверки выполняются быстро без необходимости установки дополнительного ПО.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Конфиденциальность</h3>
+                <p>Мы не храним ваши данные и файлы. Все проверки выполняются локально в вашем браузере.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-mobile-alt"></i>
+                </div>
+                <h3>Адаптивный дизайн</h3>
+                <p>Сайт работает на любых устройствах: компьютерах, планшетах и смартфонах.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>SecurityCheck &copy; 2023 | Инструменты для проверки безопасности в интернете</p>
+            <p>Данный сайт является демонстрационным аналогом ip2.com</p>
         </footer>
     </div>
 
-    <!-- JavaScript -->
     <script>
-        // DOM Elements
-        const tabBtns = document.querySelectorAll('.tab-btn');
+        // Элементы DOM
+        const tabs = document.querySelectorAll('.tab');
         const tabContents = document.querySelectorAll('.tab-content');
-        const fileDropArea = document.getElementById('file-drop-area');
-        const fileInput = document.getElementById('file-input');
-        const filePreview = document.getElementById('file-preview');
+        const checkIpBtn = document.getElementById('check-ip-btn');
+        const checkAnonymityBtn = document.getElementById('check-anonymity-btn');
+        const checkSecurityBtn = document.getElementById('check-security-btn');
         const scanFileBtn = document.getElementById('scan-file-btn');
-        const progressContainer = document.getElementById('progress-container');
+        const fileInput = document.getElementById('file-input');
+        const fileDropArea = document.getElementById('file-drop-area');
+        const progressBar = document.getElementById('progress-bar');
         const progressFill = document.getElementById('progress-fill');
-        const progressPercent = document.getElementById('progress-percent');
 
-        // State
-        let currentFile = null;
-        let isScanning = false;
+        // Текущий выбранный файл
+        let selectedFile = null;
 
-        // ===== TAB FUNCTIONALITY =====
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
+        // Переключение вкладок
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const tabId = tab.getAttribute('data-tab');
                 
-                // Update active tab button
-                tabBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+                // Убираем активный класс у всех вкладок и контента
+                tabs.forEach(t => t.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
                 
-                // Show active tab content
-                tabContents.forEach(content => {
-                    content.classList.remove('active');
-                    if (content.id === tabId) {
-                        content.classList.add('active');
-                    }
-                });
+                // Добавляем активный класс выбранной вкладке и контенту
+                tab.classList.add('active');
+                document.getElementById(tabId).classList.add('active');
             });
         });
 
-        // ===== IP CHECK FUNCTIONALITY =====
-        document.getElementById('check-ip-btn').addEventListener('click', async () => {
-            const container = document.getElementById('ip-results-container');
-            showLoader(container, 'Анализируем IP-адрес...');
+        // Проверка IP-адреса
+        checkIpBtn.addEventListener('click', async () => {
+            const resultArea = document.getElementById('ip-result');
+            const resultContent = document.getElementById('ip-result-content');
+            
+            // Показываем индикатор загрузки
+            resultContent.innerHTML = '<div class="loader"></div>Идет получение информации об IP...';
+            resultArea.style.display = 'block';
             
             try {
-                // Get IP address
-                const ipResponse = await fetch('https://api.ipify.org?format=json');
-                const ipData = await ipResponse.json();
+                // Получаем информацию об IP через внешний API
+                const response = await fetch('https://api.ipify.org?format=json');
+                const ipData = await response.json();
+                const ip = ipData.ip;
                 
-                // Simulate geolocation data (in production, use a proper API)
-                const locationData = await simulateGeolocation(ipData.ip);
+                // Получаем дополнительную информацию об IP (симуляция, т.к. CORS блокирует многие API)
+                // В реальном приложении нужно использовать свой серверный прокси или API с поддержкой CORS
+                const locationInfo = await simulateIPLocation(ip);
                 
-                // Render results
-                renderIPResults(container, {
-                    ip: ipData.ip,
-                    ...locationData,
-                    timestamp: new Date().toLocaleString('ru-RU')
-                });
+                // Форматируем результат
+                resultContent.innerHTML = `
+IP-адрес: <strong>${ip}</strong>
+
+Местоположение:
+  Город: ${locationInfo.city}
+  Регион: ${locationInfo.region}
+  Страна: ${locationInfo.country}
+  Часовой пояс: ${locationInfo.timezone}
+
+Провайдер: ${locationInfo.isp}
+Тип подключения: ${locationInfo.connectionType}
+
+Ваш IP является ${locationInfo.type === 'public' ? 'публичным' : 'приватным'}.
+${locationInfo.proxy || locationInfo.vpn ? '⚠ Обнаружены признаки использования VPN/прокси' : '✓ Прямое подключение'}
+                `;
                 
             } catch (error) {
-                showError(container, 'Ошибка при получении данных об IP');
+                resultContent.innerHTML = `Ошибка при получении данных: ${error.message}\n\nИнформация о вашем IP (симуляция):\n\nIP-адрес: 192.168.1.1 (пример)\nМестоположение: Не определено\nПровайдер: Домашняя сеть`;
             }
         });
 
-        // ===== ANONYMITY CHECK FUNCTIONALITY =====
-        document.getElementById('check-anonymity-btn').addEventListener('click', () => {
-            const container = document.getElementById('anonymity-results-container');
-            showLoader(container, 'Проверяем анонимность...');
+        // Проверка анонимности
+        checkAnonymityBtn.addEventListener('click', () => {
+            const resultArea = document.getElementById('anonymity-result');
+            const resultContent = document.getElementById('anonymity-result-content');
             
-            // Simulate check with delay
+            // Показываем индикатор загрузки
+            resultContent.innerHTML = '<div class="loader"></div>Проверяем вашу анонимность...';
+            resultArea.style.display = 'block';
+            
+            // Симуляция проверки анонимности
             setTimeout(() => {
-                const anonymityData = checkAnonymity();
-                renderAnonymityResults(container, anonymityData);
+                const anonymityScore = Math.floor(Math.random() * 100);
+                let status, statusClass, statusIcon;
+                
+                if (anonymityScore > 70) {
+                    status = "Высокая анонимность";
+                    statusClass = "safe";
+                    statusIcon = "✓";
+                } else if (anonymityScore > 40) {
+                    status = "Средняя анонимность";
+                    statusClass = "warning";
+                    statusIcon = "⚠";
+                } else {
+                    status = "Низкая анонимность";
+                    statusClass = "danger";
+                    statusIcon = "✗";
+                }
+                
+                resultContent.innerHTML = `
+Оценка анонимности: <strong>${anonymityScore}%</strong>
+Статус: <span class="status-indicator ${statusClass}"></span>${statusIcon} ${status}
+
+Детальная информация:
+✓ Разрешение экрана: ${screen.width} × ${screen.height}
+✓ Язык браузера: ${navigator.language}
+✓ Включены cookies: Да
+✓ JavaScript включен: Да
+✓ Трекеры: Обнаружено ${Math.floor(Math.random() * 5)} трекеров
+✓ Фингерпринтинг: ${anonymityScore > 60 ? "Затруднен" : "Возможен"}
+${navigator.doNotTrack ? "✓ Do Not Track включен" : "✗ Do Not Track не включен"}
+
+Рекомендации:
+${anonymityScore > 70 ? "• Ваша анонимность на хорошем уровне" : "• Используйте VPN для повышения анонимности"}
+${navigator.doNotTrack ? "" : "• Включите опцию Do Not Track в настройках браузера"}
+• Используйте расширения для блокировки трекеров (uBlock Origin, Privacy Badger)
+                `;
             }, 1500);
         });
 
-        // ===== FILE UPLOAD FUNCTIONALITY =====
-        fileDropArea.addEventListener('click', () => fileInput.click());
-        
+        // Проверка безопасности системы
+        checkSecurityBtn.addEventListener('click', () => {
+            const resultArea = document.getElementById('security-result');
+            const resultContent = document.getElementById('security-result-content');
+            
+            // Показываем индикатор загрузки
+            resultContent.innerHTML = '<div class="loader"></div>Проверяем настройки безопасности...';
+            resultArea.style.display = 'block';
+            
+            // Симуляция проверки безопасности
+            setTimeout(() => {
+                const securityChecks = [
+                    { name: "HTTPS соединение", result: window.location.protocol === "https:", important: true },
+                    { name: "Защита от фишинга", result: Math.random() > 0.3, important: true },
+                    { name: "Защита от вредоносных сайтов", result: Math.random() > 0.2, important: true },
+                    { name: "Блокировка небезопасного контента", result: Math.random() > 0.4, important: false },
+                    { name: "Обновления системы", result: Math.random() > 0.1, important: true },
+                    { name: "Защита от трекеров", result: Math.random() > 0.5, important: false },
+                    { name: "Блокировка всплывающих окон", result: Math.random() > 0.6, important: false },
+                    { name: "Безопасные пароли", result: Math.random() > 0.7, important: true }
+                ];
+                
+                let passedChecks = securityChecks.filter(check => check.result).length;
+                let totalChecks = securityChecks.length;
+                let securityScore = Math.round((passedChecks / totalChecks) * 100);
+                
+                let status, statusClass, statusIcon;
+                
+                if (securityScore > 80) {
+                    status = "Высокий уровень безопасности";
+                    statusClass = "safe";
+                    statusIcon = "✓";
+                } else if (securityScore > 50) {
+                    status = "Средний уровень безопасности";
+                    statusClass = "warning";
+                    statusIcon = "⚠";
+                } else {
+                    status = "Низкий уровень безопасности";
+                    statusClass = "danger";
+                    statusIcon = "✗";
+                }
+                
+                let checksList = "Результаты проверки:\n\n";
+                securityChecks.forEach(check => {
+                    const icon = check.result ? "✓" : "✗";
+                    const importance = check.important ? " (важно)" : "";
+                    checksList += `${icon} ${check.name}${importance}\n`;
+                });
+                
+                resultContent.innerHTML = `
+Общая оценка безопасности: <strong>${securityScore}%</strong>
+Статус: <span class="status-indicator ${statusClass}"></span>${statusIcon} ${status}
+
+${checksList}
+
+Критические проблемы:
+${securityChecks.filter(c => !c.result && c.important).length > 0 
+    ? securityChecks.filter(c => !c.result && c.important).map(c => `• ${c.name}`).join('\n')
+    : '✓ Критических проблем не обнаружено'}
+
+Рекомендации:
+• Обновляйте операционную систему и браузер
+• Используйте антивирусное ПО
+• Включайте двухфакторную аутентификацию
+• Регулярно меняйте пароли
+                `;
+            }, 2000);
+        });
+
+        // Работа с загрузкой файлов
+        fileDropArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
         fileDropArea.addEventListener('dragover', (e) => {
             e.preventDefault();
-            fileDropArea.classList.add('dragover');
+            fileDropArea.style.borderColor = '#3b82f6';
+            fileDropArea.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
         });
-        
+
         fileDropArea.addEventListener('dragleave', () => {
-            fileDropArea.classList.remove('dragover');
+            fileDropArea.style.borderColor = '#475569';
+            fileDropArea.style.backgroundColor = '#1e293b';
         });
-        
+
         fileDropArea.addEventListener('drop', (e) => {
             e.preventDefault();
-            fileDropArea.classList.remove('dragover');
+            fileDropArea.style.borderColor = '#475569';
+            fileDropArea.style.backgroundColor = '#1e293b';
             
             if (e.dataTransfer.files.length) {
                 handleFileSelect(e.dataTransfer.files[0]);
             }
         });
-        
+
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length) {
                 handleFileSelect(e.target.files[0]);
             }
         });
-        
+
         function handleFileSelect(file) {
-            // Validate file size (100MB max)
-            if (file.size > 100 * 1024 * 1024) {
-                alert('Файл слишком большой. Максимальный размер: 100 МБ');
+            // Проверка размера файла (макс. 50 МБ)
+            if (file.size > 50 * 1024 * 1024) {
+                alert('Файл слишком большой. Максимальный размер: 50 МБ');
                 return;
             }
             
-            currentFile = file;
+            selectedFile = file;
             scanFileBtn.disabled = false;
-            
-            // Show file preview
-            const fileSize = (file.size / 1024 / 1024).toFixed(2);
-            filePreview.innerHTML = `
-                <div class="file-info">
-                    <i class="fas fa-file-alt file-icon"></i>
-                    <div class="file-details">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${fileSize} МБ</div>
-                    </div>
-                    <button class="file-remove" onclick="removeFile()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
+            fileDropArea.innerHTML = `
+                <i class="fas fa-file-alt"></i>
+                <p><strong>${file.name}</strong></p>
+                <p>${(file.size / 1024 / 1024).toFixed(2)} МБ</p>
+                <p>Нажмите "Сканировать файл" для проверки</p>
             `;
-            filePreview.style.display = 'block';
+            
+            // Сбрасываем предыдущие результаты
+            document.getElementById('file-result').style.display = 'none';
         }
-        
-        window.removeFile = function() {
-            currentFile = null;
-            scanFileBtn.disabled = true;
-            filePreview.style.display = 'none';
-            fileInput.value = '';
-        };
 
-        // ===== FILE SCAN FUNCTIONALITY =====
-        scanFileBtn.addEventListener('click', async () => {
-            if (!currentFile || isScanning) return;
+        // Сканирование файла
+        scanFileBtn.addEventListener('click', () => {
+            if (!selectedFile) return;
             
-            isScanning = true;
-            scanFileBtn.disabled = true;
-            const container = document.getElementById('file-results-container');
+            const resultArea = document.getElementById('file-result');
+            const resultContent = document.getElementById('file-result-content');
             
-            // Show progress
-            progressContainer.style.display = 'block';
+            // Показываем прогресс бар
+            progressBar.style.display = 'block';
             progressFill.style.width = '0%';
-            progressPercent.textContent = '0%';
+            resultArea.style.display = 'block';
+            resultContent.innerHTML = 'Подготовка к сканированию...';
             
-            // Simulate scanning process
-            simulateScan(currentFile, container);
-        });
-
-        function simulateScan(file, container) {
+            // Симуляция процесса сканирования
             let progress = 0;
-            const steps = [
-                'Подготовка к сканированию...',
-                'Анализ структуры файла...',
-                'Проверка сигнатур...',
-                'Эвристический анализ...',
-                'Проверка облачными антивирусами...',
-                'Финальный анализ...'
-            ];
-            
-            const interval = setInterval(() => {
-                progress += Math.random() * 20;
+            const scanInterval = setInterval(() => {
+                progress += Math.random() * 15;
                 if (progress > 100) progress = 100;
-                
                 progressFill.style.width = `${progress}%`;
-                progressPercent.textContent = `${Math.floor(progress)}%`;
                 
-                // Update status message
-                const stepIndex = Math.floor(progress / (100 / steps.length));
-                if (stepIndex < steps.length) {
-                    showLoader(container, steps[stepIndex]);
-                }
-                
-                if (progress >= 100) {
-                    clearInterval(interval);
-                    
-                    // Simulate scan results
-                    setTimeout(() => {
-                        isScanning = false;
-                        progressContainer.style.display = 'none';
-                        const scanResults = simulateScanResults(file);
-                        renderFileResults(container, scanResults);
-                        scanFileBtn.disabled = false;
-                    }, 500);
+                if (progress < 30) {
+                    resultContent.innerHTML = `Сканирование... ${Math.floor(progress)}%\nАнализ структуры файла...`;
+                } else if (progress < 60) {
+                    resultContent.innerHTML = `Сканирование... ${Math.floor(progress)}%\nПроверка на наличие известных сигнатур...`;
+                } else if (progress < 90) {
+                    resultContent.innerHTML = `Сканирование... ${Math.floor(progress)}%\nЭвристический анализ...`;
+                } else if (progress >= 100) {
+                    clearInterval(scanInterval);
+                    simulateFileScanResult(selectedFile, resultContent);
                 }
             }, 300);
-        }
-
-        // ===== SECURITY CHECK FUNCTIONALITY =====
-        document.getElementById('check-security-btn').addEventListener('click', () => {
-            const container = document.getElementById('security-results-container');
-            showLoader(container, 'Анализируем систему...');
-            
-            // Simulate check with delay
-            setTimeout(() => {
-                const securityData = checkSecurity();
-                renderSecurityResults(container, securityData);
-            }, 2000);
         });
 
-       
+        // Функция симуляции результата сканирования файла
+        function simulateFileScanResult(file, resultContent) {
+            const fileExt = file.name.split('.').pop().toLowerCase();
+            const fileSizeMB = file.size / 1024 / 1024;
+            const fileName = file.name;
+            
+            // Определяем, будет ли файл "заражен" (для демонстрации)
+            // В реальном приложении здесь должно быть обращение к антивирусному API
+            const isInfected = Math.random() > 0.85;
+            const threatName = isInfected ? getRandomThreatName() : null;
+            const scanTime = (Math.random() * 5 + 1).toFixed(2);
+            
+            if (isInfected) {
+                resultContent.innerHTML = `
+РЕЗУЛЬТАТ СКАНИРОВАНИЯ: <span style="color:#ef4444">ОБНАРУЖЕНА УГРОЗА!</span>
+
+Файл: ${fileName}
+Размер: ${fileSizeMB.toFixed(2)} МБ
+Тип: ${fileExt.toUpperCase()} файл
+
+Обнаруженные угрозы:
+✗ ${threatName}
+
+Статус: <span class="status-indicator danger"></span>ОПАСНО
+Время сканирования: ${scanTime} сек.
+
+Рекомендуемые действия:
+1. Немедленно удалите этот файл
+2. Проверьте систему полноценным антивирусом
+3. Не открывайте подозрительные файлы из неизвестных источников
+                `;
+            } else {
+                resultContent.innerHTML = `
+РЕЗУЛЬТАТ СКАНИРОВАНИЯ: <span style="color:#10b981">УГРОЗ НЕ ОБНАРУЖЕНО</span>
+
+Файл: ${fileName}
+Размер: ${fileSizeMB.toFixed(2)} МБ
+Тип: ${fileExt.toUpperCase()} файл
+
+Просканировано элементов: ${Math.floor(Math.random() * 5000) + 1000}
+Обнаруженные угрозы: 0
+
+Статус: <span class="status-indicator safe"></span>БЕЗОПАСНО
+Время сканирования: ${scanTime} сек.
+
+Рекомендации:
+✓ Файл безопасен для использования
+✓ Всегда проверяйте файлы из неизвестных источников
+✓ Регулярно обновляйте антивирусные базы
+                `;
+            }
+            
+            // Скрываем прогресс бар после завершения
+            setTimeout(() => {
+                progressBar.style.display = 'none';
+            }, 500);
+        }
+
+        // Вспомогательные функции
+        function simulateIPLocation(ip) {
+            // В реальном приложении здесь должен быть запрос к Geolocation API
+            // Для демонстрации возвращаем фиктивные данные
+            const cities = ['Москва', 'Санкт-Петербург', 'Новосибирск', 'Екатеринбург', 'Казань'];
+            const isps = ['Ростелеком', 'МТС', 'Билайн', 'МегаФон', 'Дом.ru'];
+            const connectionTypes = ['Кабельный', 'Оптоволокно', 'DSL', 'Мобильный', 'Спутниковый'];
+            
+            return {
+                ip: ip,
+                city: cities[Math.floor(Math.random() * cities.length)],
+                region: 'Центральный федеральный округ',
+                country: 'Россия',
+                timezone: 'GMT+3',
+                isp: isps[Math.floor(Math.random() * isps.length)],
+                connectionType: connectionTypes[Math.floor(Math.random() * connectionTypes.length)],
+                type: 'public',
+                proxy: Math.random() > 0.7,
+                vpn: Math.random() > 0.8
+            };
+        }
+
+        function getRandomThreatName() {
+            const threats = [
+                "Trojan.Win32.Generic",
+                "RiskWare.Downloader",
+                "Exploit.JS.Agent",
+                "Adware.Elex",
+                "Ransomware.Crypmod",
+                "Backdoor.Agent",
+                "PUP.Optional.OpenCandy"
+            ];
+            return threats[Math.floor(Math.random() * threats.length)];
+        }
+
+        // Автоматическая проверка IP при загрузке страницы
+        window.addEventListener('DOMContentLoaded', () => {
+            // Небольшая задержка для лучшего UX
+            setTimeout(() => {
+                checkIpBtn.click();
+            }, 500);
+        });
+    </script>
+</body>
+</html>
